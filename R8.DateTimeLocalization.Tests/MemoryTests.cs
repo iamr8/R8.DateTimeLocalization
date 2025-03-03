@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using FluentAssertions;
 using R8.DateTimeLocalization.Tests.TimezoneMappers;
 using Xunit.Abstractions;
 
@@ -31,11 +32,11 @@ public class MemoryTests : IAsyncLifetime
         unsafe
         {
             var dtSize = sizeof(DateTime);
-            var tzdtSize = Marshal.SizeOf<DateTimeLocal>();
+            var tzdtSize = Marshal.SizeOf<TimezoneDateTime>();
             _outputHelper.WriteLine($"DateTime size: {dtSize}");
             _outputHelper.WriteLine($"DateTimeLocal size: {tzdtSize}");
 
-            Assert.True(true);
+            tzdtSize.Should().Be(16);
         }
     }
 
@@ -44,7 +45,7 @@ public class MemoryTests : IAsyncLifetime
     {
         const int iterations = 1_000_000;
         var dt = new DateTime(2023, 10, 1);
-        var tzdt_bk = new DateTimeLocal(2023, 10, 1, LocalTimezone.Utc);
+        var tzdt_bk = new TimezoneDateTime(2023, 10, 1, LocalTimezone.Utc);
         var tzdt = tzdt_bk;
 
         _outputHelper.WriteLine($"Iterations: {iterations}");
@@ -82,7 +83,7 @@ public class MemoryTests : IAsyncLifetime
     {
         const int iterations = 1_000_000;
         var dt = new DateTime(2023, 10, 1);
-        var tzdt_bk = new DateTimeLocal(2023, 10, 1, LocalTimezone.Utc).WithTimezone(LocalTimezone.GetOrCreate("Asia/Tehran"));
+        var tzdt_bk = new TimezoneDateTime(2023, 10, 1, LocalTimezone.Utc).WithTimezone(LocalTimezone.GetOrCreate("Asia/Tehran"));
         var tzdt = tzdt_bk;
 
         _outputHelper.WriteLine($"Iterations: {iterations}");
@@ -120,7 +121,7 @@ public class MemoryTests : IAsyncLifetime
     {
         const int iterations = 1_000_000;
         var dt = new DateTime(2023, 10, 1);
-        var tzdt = new DateTimeLocal(2023, 10, 1, LocalTimezone.Utc);
+        var tzdt = new TimezoneDateTime(2023, 10, 1, LocalTimezone.Utc);
 
         _outputHelper.WriteLine($"Iterations: {iterations}");
 
@@ -141,7 +142,7 @@ public class MemoryTests : IAsyncLifetime
         for (var i = 0; i < iterations; i++)
         {
             if (i % 1000 == 0)
-                tzdt = new DateTimeLocal(2023, 10, 1, LocalTimezone.Utc);
+                tzdt = new TimezoneDateTime(2023, 10, 1, LocalTimezone.Utc);
 
             tzdt = tzdt.AddYears(1);
         }
@@ -157,7 +158,7 @@ public class MemoryTests : IAsyncLifetime
     {
         const int iterations = 1_000_000;
         var dt = new DateTime(2023, 10, 1);
-        var tzdt_bk = new DateTimeLocal(2023, 10, 1, LocalTimezone.Utc).WithTimezone(LocalTimezone.GetOrCreate("Asia/Tehran"));
+        var tzdt_bk = new TimezoneDateTime(2023, 10, 1, LocalTimezone.Utc).WithTimezone(LocalTimezone.GetOrCreate("Asia/Tehran"));
         var tzdt = tzdt_bk;
 
         _outputHelper.WriteLine($"Iterations: {iterations}");
@@ -195,7 +196,7 @@ public class MemoryTests : IAsyncLifetime
     {
         const int iterations = 1_000_000;
         var dt = new DateTime(2023, 10, 1);
-        var tzdt = new DateTimeLocal(2023, 10, 1, LocalTimezone.Utc);
+        var tzdt = new TimezoneDateTime(2023, 10, 1, LocalTimezone.Utc);
 
         _outputHelper.WriteLine($"Iterations: {iterations}");
 
@@ -226,7 +227,7 @@ public class MemoryTests : IAsyncLifetime
     {
         const int iterations = 1_000_000;
         var dt = new DateTime(2023, 10, 1);
-        var tzdt = new DateTimeLocal(2023, 10, 1, LocalTimezone.Utc).WithTimezone(LocalTimezone.GetOrCreate("Asia/Tehran"));
+        var tzdt = new TimezoneDateTime(2023, 10, 1, LocalTimezone.Utc).WithTimezone(LocalTimezone.GetOrCreate("Asia/Tehran"));
 
         _outputHelper.WriteLine($"Iterations: {iterations}");
 
@@ -257,7 +258,7 @@ public class MemoryTests : IAsyncLifetime
     {
         const int iterations = 1_000_000;
         var dt = new DateTime(2023, 10, 1);
-        var tzdt = new DateTimeLocal(2023, 10, 1, LocalTimezone.Utc);
+        var tzdt = new TimezoneDateTime(2023, 10, 1, LocalTimezone.Utc);
 
         _outputHelper.WriteLine($"Iterations: {iterations}");
 
@@ -288,7 +289,7 @@ public class MemoryTests : IAsyncLifetime
     {
         const int iterations = 1_000_000;
         var dt = new DateTime(2023, 10, 1);
-        var tzdt = new DateTimeLocal(2023, 10, 1, LocalTimezone.Utc).WithTimezone(LocalTimezone.GetOrCreate("Asia/Tehran"));
+        var tzdt = new TimezoneDateTime(2023, 10, 1, LocalTimezone.Utc).WithTimezone(LocalTimezone.GetOrCreate("Asia/Tehran"));
 
         _outputHelper.WriteLine($"Iterations: {iterations}");
 
@@ -310,6 +311,106 @@ public class MemoryTests : IAsyncLifetime
 
         stopWatch.Stop();
         _outputHelper.WriteLine($"DateTimeLocal GetMinute: {stopWatch.ElapsedMilliseconds} ms");
+
+        Assert.True(true);
+    }
+
+    [Fact]
+    public void GetStartOfNextWeek_Tehran()
+    {
+        const int iterations = 1_000_000;
+        var tzdt_bk = new TimezoneDateTime(2023, 10, 1, LocalTimezone.Utc).WithTimezone(LocalTimezone.GetOrCreate("Asia/Tehran"));
+        var tzdt = tzdt_bk;
+
+        _outputHelper.WriteLine($"Iterations: {iterations}");
+
+        var stopWatch = new Stopwatch();
+        stopWatch.Start();
+        for (var i = 0; i < iterations; i++)
+        {
+            if (i % 1000 == 0)
+                tzdt = tzdt_bk;
+
+            tzdt = tzdt.GetStartOfNextWeek();
+        }
+
+        stopWatch.Stop();
+        _outputHelper.WriteLine($"DateTimeLocal GetStartOfNextWeek: {stopWatch.ElapsedMilliseconds} ms");
+
+        Assert.True(true);
+    }
+
+    [Fact]
+    public void GetStartOfNextMonth_Tehran()
+    {
+        const int iterations = 1_000_000;
+        var tzdt_bk = new TimezoneDateTime(2023, 10, 1, LocalTimezone.Utc).WithTimezone(LocalTimezone.GetOrCreate("Asia/Tehran"));
+        var tzdt = tzdt_bk;
+
+        _outputHelper.WriteLine($"Iterations: {iterations}");
+
+        var stopWatch = new Stopwatch();
+        stopWatch.Start();
+        for (var i = 0; i < iterations; i++)
+        {
+            if (i % 1000 == 0)
+                tzdt = tzdt_bk;
+
+            tzdt = tzdt.GetStartOfNextMonth();
+        }
+
+        stopWatch.Stop();
+        _outputHelper.WriteLine($"DateTimeLocal GetStartOfNextMonth: {stopWatch.ElapsedMilliseconds} ms");
+
+        Assert.True(true);
+    }
+
+    [Fact]
+    public void GetStartOfWeek_Tehran()
+    {
+        const int iterations = 1_000_000;
+        var tzdt_bk = new TimezoneDateTime(2023, 10, 1, LocalTimezone.Utc).WithTimezone(LocalTimezone.GetOrCreate("Asia/Tehran"));
+        var tzdt = tzdt_bk;
+
+        _outputHelper.WriteLine($"Iterations: {iterations}");
+
+        var stopWatch = new Stopwatch();
+        stopWatch.Start();
+        for (var i = 0; i < iterations; i++)
+        {
+            if (i % 1000 == 0)
+                tzdt = tzdt_bk;
+
+            tzdt = tzdt.GetStartOfWeek();
+        }
+
+        stopWatch.Stop();
+        _outputHelper.WriteLine($"DateTimeLocal GetStartOfWeek: {stopWatch.ElapsedMilliseconds} ms");
+
+        Assert.True(true);
+    }
+
+    [Fact]
+    public void GetStartOfNextDay_Tehran()
+    {
+        const int iterations = 1_000_000;
+        var tzdt_bk = new TimezoneDateTime(2023, 10, 1, LocalTimezone.Utc).WithTimezone(LocalTimezone.GetOrCreate("Asia/Tehran"));
+        var tzdt = tzdt_bk;
+
+        _outputHelper.WriteLine($"Iterations: {iterations}");
+
+        var stopWatch = new Stopwatch();
+        stopWatch.Start();
+        for (var i = 0; i < iterations; i++)
+        {
+            if (i % 1000 == 0)
+                tzdt = tzdt_bk;
+
+            tzdt = tzdt.GetStartOfNextDay();
+        }
+
+        stopWatch.Stop();
+        _outputHelper.WriteLine($"DateTimeLocal GetStartOfNextDay: {stopWatch.ElapsedMilliseconds} ms");
 
         Assert.True(true);
     }

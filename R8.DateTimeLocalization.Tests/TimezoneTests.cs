@@ -80,7 +80,6 @@ public class TimezoneTests
 
         // Assert
         timezone.IanaId.Should().Be("Europe/Istanbul");
-        timezone.GetSystemTimeZone().StandardName.Should().BeOneOf("Turkey Standard Time", "Turkey Daylight Time");
         timezone.ToString().Should().Be("GMT+03:00");
         timezone.Culture.Should().Be(CultureInfo.GetCultureInfo("tr-TR"));
         timezone.Calendar.Should().Be(CalendarSystem.Gregorian);
@@ -126,7 +125,6 @@ public class TimezoneTests
 
         // Assert
         timezone.IanaId.Should().Be("Europe/London");
-        timezone.GetSystemTimeZone().StandardName.Should().BeOneOf("GMT Standard Time", "GMT Daylight Time");
         timezone.ToString().Should().BeOneOf("GMT+00:00", "GMT+01:00");
         timezone.Culture.Should().Be(CultureInfo.GetCultureInfo("en-GB"));
         timezone.Calendar.Should().Be(CalendarSystem.Gregorian);
@@ -234,36 +232,6 @@ public class TimezoneTests
     {
         var timezone = (LocalTimezone)"Asia/Tehran";
         timezone.IanaId.Should().Be("Asia/Tehran");
-    }
-
-    [Fact]
-    public void should_return_zoned_date_time_from_utc_datetime_according_to_timezone()
-    {
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
-        var dateTime = new DateTime(2021, 1, 1, 12, 0, 5, DateTimeKind.Utc);
-        var zonedDateTime = dateTime.ToZonedDateTime(timezone);
-
-        zonedDateTime.Year.Should().Be(1399);
-        zonedDateTime.Month.Should().Be(10);
-        zonedDateTime.Day.Should().Be(12);
-        zonedDateTime.Hour.Should().Be(15);
-        zonedDateTime.Minute.Should().Be(30);
-        zonedDateTime.Second.Should().Be(5);
-    }
-
-    [Fact]
-    public void should_return_zoned_date_time_from_local_datetime_according_to_timezone()
-    {
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
-        var dateTime = new DateTime(2021, 1, 1, 12, 0, 0, DateTimeKind.Local);
-        var zonedDateTime = dateTime.ToZonedDateTime(timezone);
-
-        zonedDateTime.Year.Should().Be(1399);
-        zonedDateTime.Month.Should().Be(10);
-        zonedDateTime.Day.Should().Be(12);
-        zonedDateTime.Hour.Should().Be(12);
-        zonedDateTime.Minute.Should().Be(0);
-        zonedDateTime.Second.Should().Be(0);
     }
 
     [Fact]

@@ -1,12 +1,11 @@
 using System;
 using NodaTime;
 
-namespace R8.DateTimeLocalization
+namespace R8.DateTimeLocalization;
+
+public interface ITimezone : ITimezoneInfo, IEquatable<ITimezone>
 {
-    public interface ITimezone : ITimezoneInfo, IEquatable<ITimezone>
-    {
-        CalendarSystem Calendar { get; }
-        Offset Offset { get; }
-        TimeZoneInfo GetSystemTimeZone();
-    }
+    CalendarSystem Calendar { get; }
+    Offset Offset { get; }
+    TimeZoneInfo GetSystemTimeZone();
 }

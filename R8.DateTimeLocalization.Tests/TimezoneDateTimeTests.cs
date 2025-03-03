@@ -4,11 +4,11 @@ using Xunit.Abstractions;
 
 namespace R8.DateTimeLocalization.Tests;
 
-public class DateTimeLocalTests : IAsyncLifetime
+public class TimezoneDateTimeTests : IAsyncLifetime
 {
     private readonly ITestOutputHelper _outputHelper;
 
-    public DateTimeLocalTests(ITestOutputHelper outputHelper)
+    public TimezoneDateTimeTests(ITestOutputHelper outputHelper)
     {
         _outputHelper = outputHelper;
     }
@@ -36,8 +36,8 @@ public class DateTimeLocalTests : IAsyncLifetime
     public void should()
     {
         var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone();
-        var tzdt1 = new DateTimeLocal(1402, 12, 1, 0, 0, 0, timezone);
-        var tzdt2 = new DateTimeLocal(1402, 12, 29, 23, 59, 59, timezone);
+        var tzdt1 = new TimezoneDateTime(1402, 12, 1, 0, 0, 0, timezone);
+        var tzdt2 = new TimezoneDateTime(1402, 12, 29, 23, 59, 59, timezone);
 
         _outputHelper.WriteLine(tzdt1.GetUtcDateTime().ToString());
         _outputHelper.WriteLine(tzdt2.GetUtcDateTime().ToString());
@@ -50,7 +50,7 @@ public class DateTimeLocalTests : IAsyncLifetime
         var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone();
 
 
-        var result = dateTime.ToDateTimeLocal(timezone);
+        var result = dateTime.ToTimezoneDateTime(timezone);
 
         Assert.Equal(1399, result.Year);
         Assert.Equal(10, result.Month);
@@ -72,7 +72,7 @@ public class DateTimeLocalTests : IAsyncLifetime
 
         var dateTime = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        var result = dateTime.ToDateTimeLocal();
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Current);
 
         Assert.Equal(1399, result.Year);
         Assert.Equal(10, result.Month);
@@ -91,7 +91,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_from_start_of_week_when_current_day_is_in_middle_of_week()
     {
-        var result = new DateTimeLocal(1402, 11, 24, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1402, 11, 24, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.GetStartOfWeek();
 
         Assert.Equal(1402, result.Year);
@@ -106,7 +106,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_from_start_of_week_when_current_day_is_first_day_of_week()
     {
-        var result = new DateTimeLocal(1402, 11, 21, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1402, 11, 21, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.GetStartOfWeek();
 
         Assert.Equal(1402, result.Year);
@@ -121,7 +121,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_from_start_of_week_when_current_day_is_last_day_of_week()
     {
-        var result = new DateTimeLocal(1402, 11, 27, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1402, 11, 27, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.GetStartOfWeek();
 
         Assert.Equal(1402, result.Year);
@@ -136,7 +136,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_from_end_of_week_when_current_day_is_first_day_of_week()
     {
-        var result = new DateTimeLocal(1402, 11, 21, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1402, 11, 21, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.GetEndOfWeek();
 
         Assert.Equal(1402, result.Year);
@@ -151,7 +151,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_from_end_of_week_when_current_day_is_last_day_of_week()
     {
-        var result = new DateTimeLocal(1402, 11, 27, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1402, 11, 27, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.GetEndOfWeek();
 
         Assert.Equal(1402, result.Year);
@@ -166,7 +166,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_from_end_of_week_when_current_day_is_in_middle_of_week()
     {
-        var result = new DateTimeLocal(1402, 11, 24, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1402, 11, 24, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.GetEndOfWeek();
 
         Assert.Equal(1402, result.Year);
@@ -181,7 +181,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_with_start_of_hour()
     {
-        var result = new DateTimeLocal(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.GetStartOfHour();
 
         Assert.Equal(1399, result.Year);
@@ -199,7 +199,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_with_end_of_hour()
     {
-        var result = new DateTimeLocal(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.GetEndOfHour();
 
         Assert.Equal(1399, result.Year);
@@ -217,7 +217,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_with_start_of_minute()
     {
-        var result = new DateTimeLocal(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.GetStartOfMinute();
 
         Assert.Equal(1399, result.Year);
@@ -235,7 +235,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_with_end_of_minute()
     {
-        var result = new DateTimeLocal(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.GetEndOfMinute();
 
         Assert.Equal(1399, result.Year);
@@ -253,7 +253,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_with_start_of_day()
     {
-        var result = new DateTimeLocal(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.GetStartOfDay();
 
         Assert.Equal(1399, result.Year);
@@ -271,7 +271,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_with_end_of_day()
     {
-        var result = new DateTimeLocal(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.GetEndOfDay();
 
         Assert.Equal(1399, result.Year);
@@ -289,7 +289,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_with_start_of_month()
     {
-        var result = new DateTimeLocal(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.GetStartOfMonth();
 
         Assert.Equal(1399, result.Year);
@@ -307,7 +307,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_with_end_of_month()
     {
-        var result = new DateTimeLocal(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.GetEndOfMonth();
 
         Assert.Equal(1399, result.Year);
@@ -325,7 +325,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_from_local_date_time()
     {
-        var result = new DateTimeLocal(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         Assert.Equal(1399, result.Year);
         Assert.Equal(10, result.Month);
@@ -342,7 +342,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_from_local_date()
     {
-        var result = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         Assert.Equal(1399, result.Year);
         Assert.Equal(10, result.Month);
@@ -362,7 +362,7 @@ public class DateTimeLocalTests : IAsyncLifetime
         var dateTime = new DateTime(2021, 3, 21, 12, 0, 0, DateTimeKind.Utc);
 
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         Assert.Equal(1400, result.Year);
         Assert.Equal(1, result.Month);
@@ -382,7 +382,7 @@ public class DateTimeLocalTests : IAsyncLifetime
         var dateTime = new DateTime(2021, 3, 21, 23, 0, 0, DateTimeKind.Utc);
 
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         Assert.Equal(1400, result.Year);
         Assert.Equal(1, result.Month);
@@ -401,7 +401,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     {
         var dateTime = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddMinutes(-1);
 
         Assert.Equal(1399, result.Year);
@@ -421,7 +421,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     {
         var dateTime = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddMinutes(1);
 
         Assert.Equal(1399, result.Year);
@@ -441,7 +441,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     {
         var dateTime = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddSeconds(-1);
 
         Assert.Equal(1399, result.Year);
@@ -461,7 +461,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     {
         var dateTime = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddSeconds(1);
 
         Assert.Equal(1399, result.Year);
@@ -479,7 +479,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_add_second_resulted_to_next_minute()
     {
-        var result = new DateTimeLocal(1399, 10, 12, 4, 0, 59, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, 4, 0, 59, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddSeconds(1);
 
         Assert.Equal(1399, result.Year);
@@ -497,7 +497,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_tzdt_with_different_timezone()
     {
-        var result = new DateTimeLocal(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, 3, 30, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.WithTimezone(LocalTimezone.Mappings["Europe/Istanbul"].GetTimezone());
 
         Assert.Equal(2021, result.Year);
@@ -512,7 +512,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_add_minute_resulted_to_next_hour()
     {
-        var result = new DateTimeLocal(1399, 10, 12, 3, 59, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, 3, 59, 0, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddMinutes(1);
 
         Assert.Equal(1399, result.Year);
@@ -530,8 +530,8 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_compare_to_other_while_are_equal()
     {
-        var result = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        var result2 = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result2 = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         Assert.Equal(0, result.CompareTo(result2));
     }
@@ -541,7 +541,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     {
         var dateTime = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddMonths(1);
 
         Assert.Equal(1399, result.Year);
@@ -562,7 +562,7 @@ public class DateTimeLocalTests : IAsyncLifetime
         var dateTime = new DateTime(2021, 2, 1, 0, 0, 0, DateTimeKind.Utc);
 
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddMonths(1);
 
         Assert.Equal(1399, result.Year);
@@ -580,32 +580,57 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_add_year()
     {
-        var dateTime = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone();
+        var result = new TimezoneDateTime(1403, 05, 29, 13, 33, 0, timezone!);
+        result = result.AddYears(1);
 
+        Assert.Equal(1404, result.Year);
+        Assert.Equal(05, result.Month);
+        Assert.Equal(29, result.Day);
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        result = result.AddYears(2);
-
-        Assert.Equal(1401, result.Year);
-        Assert.Equal(10, result.Month);
-        Assert.Equal(12, result.Day);
-
-        Assert.Equal(3, result.Hour);
-        Assert.Equal(30, result.Minute);
+        Assert.Equal(13, result.Hour);
+        Assert.Equal(33, result.Minute);
         Assert.Equal(0, result.Second);
+    }
 
+    [Fact]
+    public void should_add_years()
+    {
+        var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone();
+        var result = new TimezoneDateTime(1403, 05, 29, 0, 0, 0, timezone!);
+        result = result.AddYears(3);
 
-        Assert.Equal(30, result.GetDaysInMonth());
+        Assert.Equal(1406, result.Year);
+        Assert.Equal(05, result.Month);
+        Assert.Equal(29, result.Day);
+
+        Assert.Equal(0, result.Hour);
+        Assert.Equal(0, result.Minute);
+        Assert.Equal(0, result.Second);
+    }
+
+    [Fact]
+    public void should_add_year_when_current_year_is_LeapYear()
+    {
+        var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone();
+        var result = new TimezoneDateTime(1404, 05, 29, 0, 0, 0, timezone!);
+        result = result.AddYears(1);
+
+        Assert.Equal(1405, result.Year);
+        Assert.Equal(05, result.Month);
+        Assert.Equal(29, result.Day);
+
+        Assert.Equal(0, result.Hour);
+        Assert.Equal(0, result.Minute);
+        Assert.Equal(0, result.Second);
     }
 
     [Fact]
     public void should_subtract_year()
     {
-        var dateTime = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        result = result.AddYears(-2);
+        var dateTime = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc); // 1397
+        var currentYear = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = currentYear.AddYears(-2);
 
         Assert.Equal(1397, result.Year);
         Assert.Equal(10, result.Month);
@@ -625,7 +650,7 @@ public class DateTimeLocalTests : IAsyncLifetime
         var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone()!;
         var dateTime = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        var expected = dateTime.ToDateTimeLocal(timezone);
+        var expected = dateTime.ToTimezoneDateTime(timezone);
         var actual = expected.AddDays(1);
 
         Assert.Equal(1399, actual.Year);
@@ -646,7 +671,7 @@ public class DateTimeLocalTests : IAsyncLifetime
         var dateTime = new DateTime(2021, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddMonths(1);
 
         Assert.Equal(1399, result.Year);
@@ -666,7 +691,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     {
         var dateTime = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddHours(1);
 
         Assert.Equal(1399, result.Year);
@@ -686,7 +711,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     {
         var dateTime = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddHours(-1);
 
         Assert.Equal(1399, result.Year);
@@ -706,7 +731,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     {
         var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone();
 
-        var actual = new DateTimeLocal(1399, 10, 12, 23, 30, 0, timezone);
+        var actual = new TimezoneDateTime(1399, 10, 12, 23, 30, 0, timezone);
         actual.Year.Should().Be(1399);
         actual.Month.Should().Be(10);
         actual.Day.Should().Be(12);
@@ -720,10 +745,10 @@ public class DateTimeLocalTests : IAsyncLifetime
     {
         var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone();
 
-        var actual = new DateTimeLocal(1399, 10, 12, 23, 30, 0, timezone);
+        var actual = new TimezoneDateTime(1399, 10, 12, 23, 30, 0, timezone);
         actual = actual.AddHours(1);
 
-        var expected = new DateTimeLocal(1399, 10, 13, 0, 30, 0, timezone);
+        var expected = new TimezoneDateTime(1399, 10, 13, 0, 30, 0, timezone);
         actual.Should().Be(expected);
 
         actual.Year.Should().Be(expected.Year);
@@ -740,7 +765,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_return_underlying_datetime()
     {
-        var result = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         var underlyingDateTime = result.GetUtcDateTime();
         Assert.Equal(2020, underlyingDateTime.Year);
@@ -761,7 +786,7 @@ public class DateTimeLocalTests : IAsyncLifetime
         var dateTime = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddMonths(-1);
 
         Assert.Equal(1399, result.Year);
@@ -778,7 +803,7 @@ public class DateTimeLocalTests : IAsyncLifetime
         var dateTime = new DateTime(2023, 2, 3, 0, 0, 0, DateTimeKind.Utc);
 
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddMonths(-12);
 
         Assert.Equal(1400, result.Year);
@@ -795,7 +820,7 @@ public class DateTimeLocalTests : IAsyncLifetime
         var dateTime = new DateTime(2023, 2, 3, 0, 0, 0, DateTimeKind.Utc);
 
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddMonths(12);
 
         Assert.Equal(1402, result.Year);
@@ -812,7 +837,7 @@ public class DateTimeLocalTests : IAsyncLifetime
         var dateTime = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddDays(-1);
 
         Assert.Equal(1399, result.Year);
@@ -826,8 +851,8 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_be_equal()
     {
-        var result = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        var result2 = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result2 = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         Assert.True(result2 == result);
     }
@@ -835,8 +860,8 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_not_be_equal()
     {
-        var result = new DateTimeLocal(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        var result2 = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result2 = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         Assert.True(result2 != result);
     }
@@ -844,8 +869,8 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_be_greater_than()
     {
-        var result = new DateTimeLocal(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        var result2 = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result2 = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         Assert.True(result > result2);
     }
@@ -853,8 +878,8 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_be_greater_than_or_equal_to()
     {
-        var result = new DateTimeLocal(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        var result2 = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result2 = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         Assert.True(result >= result2);
     }
@@ -862,8 +887,8 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_be_less_than_or_equal_to()
     {
-        var result = new DateTimeLocal(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        var result2 = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result2 = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         Assert.True(result2 <= result);
     }
@@ -871,8 +896,8 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_be_less_than()
     {
-        var result = new DateTimeLocal(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        var result2 = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result2 = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         Assert.True(result2 < result);
     }
@@ -893,7 +918,7 @@ public class DateTimeLocalTests : IAsyncLifetime
         var dateTime = new DateTime(2023, 2, 3, 0, 0, 0, DateTimeKind.Utc);
 
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         var resultString = result.ToString(format);
 
         Assert.Equal(expected, resultString);
@@ -905,7 +930,7 @@ public class DateTimeLocalTests : IAsyncLifetime
         var dateTime = new DateTime(2023, 2, 3, 0, 0, 0, DateTimeKind.Utc);
 
 
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         var resultString = result.ToString();
 
         resultString.Should().Be("1401/11/14 3:30:00");
@@ -914,8 +939,8 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_subtract_two_tzdt_by_operator()
     {
-        var result = new DateTimeLocal(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        var result2 = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result2 = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         var result3 = result - result2;
 
@@ -925,8 +950,8 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_subtract_two_tzdt_by_operator2()
     {
-        var result = new DateTimeLocal(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        var result2 = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result2 = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         var result3 = result2 - result;
 
@@ -936,8 +961,8 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_subtract_two_tzdt_by_Subtract_method()
     {
-        var result = new DateTimeLocal(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        var result2 = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result2 = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         var result3 = result2.Subtract(result);
 
@@ -947,7 +972,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_subtract_tzdt_and_TimeSpan_by_Subtract_method()
     {
-        var result = new DateTimeLocal(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         var result2 = result.Subtract(TimeSpan.FromDays(1));
 
         Assert.Equal(1399, result2.Year);
@@ -958,7 +983,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_add_tzdt_and_TimeSpan_by_Add_method()
     {
-        var original = new DateTimeLocal(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var original = new TimezoneDateTime(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         var actual = original.Add(TimeSpan.FromDays(1));
 
         Assert.Equal(1399, actual.Year);
@@ -971,7 +996,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     [InlineData(1399, 10, 30, 1, 1399, 11, 1)]
     public void should_add_tzdt_and_TimeSpan_by_operator(int year, int month, int day, int addingDays, int resultYear, int resultMonth, int resultDay)
     {
-        var result = new DateTimeLocal(year, month, day, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(year, month, day, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         var result2 = result + TimeSpan.FromDays(addingDays);
 
         Assert.Equal(resultYear, result2.Year);
@@ -983,7 +1008,7 @@ public class DateTimeLocalTests : IAsyncLifetime
     public void should_returns_ticks()
     {
         var dateTime = new DateTime(2023, 2, 3, 0, 0, 0, DateTimeKind.Utc);
-        var tzdt = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var tzdt = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         dateTime.Ticks.Should().Be(tzdt.Ticks);
     }
@@ -991,8 +1016,8 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_be_equal_by_Equal_method()
     {
-        var result = new DateTimeLocal(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        var result2 = new DateTimeLocal(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result2 = new TimezoneDateTime(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         Assert.True(result2.Equals(result));
     }
@@ -1000,8 +1025,8 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_not_be_equal_by_Equal_method()
     {
-        var result = new DateTimeLocal(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        var result2 = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result2 = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         Assert.False(result2.Equals(result));
     }
@@ -1009,8 +1034,8 @@ public class DateTimeLocalTests : IAsyncLifetime
     [Fact]
     public void should_subtract_two_tzdt_by_operator3()
     {
-        var result = new DateTimeLocal(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
-        var result2 = new DateTimeLocal(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = new TimezoneDateTime(1399, 10, 13, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result2 = new TimezoneDateTime(1399, 10, 12, LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
 
         var result3 = result - result2;
 
@@ -1021,10 +1046,172 @@ public class DateTimeLocalTests : IAsyncLifetime
     public void should_add_days()
     {
         var dateTime = new DateTime(2023, 2, 3, 0, 0, 0, DateTimeKind.Utc);
-        var result = dateTime.ToDateTimeLocal(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
+        var result = dateTime.ToTimezoneDateTime(LocalTimezone.Mappings["Asia/Tehran"].GetTimezone());
         result = result.AddDays(1);
         Assert.Equal(1401, result.Year);
         Assert.Equal(11, result.Month);
         Assert.Equal(15, result.Day);
+    }
+
+    [Fact]
+    public void should_return_start_of_next_day_from_DateTime()
+    {
+        var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone()!;
+        var dateTime = new DateTime(2023, 2, 3, 0, 0, 0, DateTimeKind.Utc);
+        var result = dateTime.ToTimezoneDateTime(timezone);
+        result = result.GetStartOfNextDay();
+        Assert.Equal(1401, result.Year);
+        Assert.Equal(11, result.Month);
+        Assert.Equal(15, result.Day);
+    }
+
+    [Fact]
+    public void should_return_start_of_next_day_from_DateTimeLocal()
+    {
+        var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone()!;
+        var result = new TimezoneDateTime(1401, 11, 14, 18, 30, 0, timezone);
+        result = result.GetStartOfNextDay();
+        result.Year.Should().Be(1401);
+        result.Month.Should().Be(11);
+        result.Day.Should().Be(15);
+        result.Hour.Should().Be(0);
+        result.Minute.Should().Be(0);
+        result.Second.Should().Be(0);
+    }
+
+    [Fact]
+    public void should_return_start_of_next_day_of_next_month_from_DateTimeLocal_when_current_day_is_last_day_of_month()
+    {
+        var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone()!;
+        var result = new TimezoneDateTime(1401, 11, 30, 18, 30, 0, timezone);
+        result = result.GetStartOfNextDay();
+        result.Year.Should().Be(1401);
+        result.Month.Should().Be(12);
+        result.Day.Should().Be(1);
+        result.Hour.Should().Be(0);
+        result.Minute.Should().Be(0);
+        result.Second.Should().Be(0);
+    }
+
+    [Fact]
+    public void should_return_start_of_first_day_of_next_year_from_DateTimeLocal_when_current_day_is_last_day_of_year()
+    {
+        var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone()!;
+        var result = new TimezoneDateTime(1401, 12, 29, 18, 30, 0, timezone);
+        result = result.GetStartOfNextDay();
+        result.Year.Should().Be(1402);
+        result.Month.Should().Be(1);
+        result.Day.Should().Be(1);
+        result.Hour.Should().Be(0);
+        result.Minute.Should().Be(0);
+        result.Second.Should().Be(0);
+    }
+
+    [Fact]
+    public void should_return_start_of_next_month_from_DateTimeLocal()
+    {
+        var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone()!;
+        var result = new TimezoneDateTime(1401, 11, 14, 18, 30, 0, timezone);
+        result = result.GetStartOfNextMonth();
+        result.Year.Should().Be(1401);
+        result.Month.Should().Be(12);
+        result.Day.Should().Be(1);
+        result.Hour.Should().Be(0);
+        result.Minute.Should().Be(0);
+        result.Second.Should().Be(0);
+    }
+
+    [Fact]
+    public void should_return_start_of_next_month_from_DateTimeLocal_when_current_month_is_last_month_of_year()
+    {
+        var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone()!;
+        var result = new TimezoneDateTime(1401, 12, 14, 18, 30, 0, timezone);
+        result = result.GetStartOfNextMonth();
+        result.Year.Should().Be(1402);
+        result.Month.Should().Be(1);
+        result.Day.Should().Be(1);
+        result.Hour.Should().Be(0);
+        result.Minute.Should().Be(0);
+        result.Second.Should().Be(0);
+    }
+
+    [Fact]
+    public void should_return_start_of_next_week_from_DateTimeLocal()
+    {
+        var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone()!;
+        var result = new TimezoneDateTime(1401, 11, 14, 18, 30, 0, timezone);
+        result = result.GetStartOfNextWeek();
+        result.Year.Should().Be(1401);
+        result.Month.Should().Be(11);
+        result.Day.Should().Be(15);
+        result.Hour.Should().Be(0);
+        result.Minute.Should().Be(0);
+        result.Second.Should().Be(0);
+    }
+
+    [Fact]
+    public void should_return_start_of_next_week_from_DateTimeLocal_when_current_week_ends_in_next_month()
+    {
+        var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone()!;
+        var result = new TimezoneDateTime(1403, 11, 30, 18, 30, 0, timezone);
+        result = result.GetStartOfNextWeek();
+        result.Year.Should().Be(1403);
+        result.Month.Should().Be(12);
+        result.Day.Should().Be(4);
+        result.Hour.Should().Be(0);
+        result.Minute.Should().Be(0);
+        result.Second.Should().Be(0);
+    }
+
+    [Fact]
+    public void should_return_start_of_next_week_from_DateTimeLocal_when_current_week_ends_in_next_year()
+    {
+        var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone()!;
+        var result = new TimezoneDateTime(1403, 12, 29, 18, 30, 0, timezone);
+        result = result.GetStartOfNextWeek();
+        result.Year.Should().Be(1404);
+        result.Month.Should().Be(1);
+        result.Day.Should().Be(2);
+        result.Hour.Should().Be(0);
+        result.Minute.Should().Be(0);
+        result.Second.Should().Be(0);
+    }
+
+    [Fact]
+    public void should_return_True_when_IsToday_Tehran()
+    {
+        var timezone = LocalTimezone.Mappings["Asia/Tehran"];
+        var local = timezone.Clock.GetCurrentLocalDateTime();
+        var zone = local.InZoneLeniently(timezone.Clock.Zone).WithCalendar(timezone.Clock.Calendar);
+
+        var result = new TimezoneDateTime(zone);
+        result.IsToday().Should().BeTrue();
+    }
+
+    [Fact]
+    public void should_return_True_when_IsToday_UTC()
+    {
+        var timezone = LocalTimezone.Mappings["UTC"];
+        var local = timezone.Clock.GetCurrentLocalDateTime();
+        var zone = local.InZoneLeniently(timezone.Clock.Zone).WithCalendar(timezone.Clock.Calendar);
+
+        var result = new TimezoneDateTime(zone);
+        result.IsToday().Should().BeTrue();
+    }
+
+    [Fact]
+    public void should_return_false_when_Is_not_Today()
+    {
+        var timezone = LocalTimezone.Mappings["Asia/Tehran"].GetTimezone()!;
+        var result = new TimezoneDateTime(1401, 11, 15, 18, 30, 0, timezone);
+        result.IsToday().Should().BeFalse();
+    }
+
+    [Fact]
+    public void should_return_false_when_Is_not_Today_UTC()
+    {
+        var timezone = LocalTimezone.Mappings["UTC"].GetTimezone()!;
+        var result = new TimezoneDateTime(2023, 2, 3, 18, 30, 0, timezone);
+        result.IsToday().Should().BeFalse();
     }
 }
