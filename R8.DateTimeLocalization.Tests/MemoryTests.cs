@@ -1,10 +1,11 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using FluentAssertions;
+using R8.DateTimeLocalization;
 using R8.DateTimeLocalization.Tests.Timezones;
 using Xunit.Abstractions;
 
-namespace R8.DateTimeLocalization.Tests;
+namespace R8.TimezoneDateTimeization.Tests;
 
 public class MemoryTests : IAsyncLifetime
 {
@@ -34,7 +35,7 @@ public class MemoryTests : IAsyncLifetime
             var dtSize = sizeof(DateTime);
             var tzdtSize = Marshal.SizeOf<TimezoneDateTime>();
             _outputHelper.WriteLine($"DateTime size: {dtSize}");
-            _outputHelper.WriteLine($"DateTimeLocal size: {tzdtSize}");
+            _outputHelper.WriteLine($"TimezoneDateTime size: {tzdtSize}");
 
             tzdtSize.Should().Be(16);
         }
@@ -73,7 +74,7 @@ public class MemoryTests : IAsyncLifetime
         }
 
         stopWatch.Stop();
-        _outputHelper.WriteLine($"DateTimeLocal AddYears: {stopWatch.ElapsedMilliseconds} ms");
+        _outputHelper.WriteLine($"TimezoneDateTime AddYears: {stopWatch.ElapsedMilliseconds} ms");
 
         Assert.True(true);
     }
@@ -111,7 +112,7 @@ public class MemoryTests : IAsyncLifetime
         }
 
         stopWatch.Stop();
-        _outputHelper.WriteLine($"DateTimeLocal AddYears: {stopWatch.ElapsedMilliseconds} ms");
+        _outputHelper.WriteLine($"TimezoneDateTime AddYears: {stopWatch.ElapsedMilliseconds} ms");
 
         Assert.True(true);
     }
@@ -148,7 +149,7 @@ public class MemoryTests : IAsyncLifetime
         }
 
         stopWatch.Stop();
-        _outputHelper.WriteLine($"DateTimeLocal AddYears: {stopWatch.ElapsedMilliseconds} ms");
+        _outputHelper.WriteLine($"TimezoneDateTime AddYears: {stopWatch.ElapsedMilliseconds} ms");
 
         Assert.True(true);
     }
@@ -186,7 +187,7 @@ public class MemoryTests : IAsyncLifetime
         }
 
         stopWatch.Stop();
-        _outputHelper.WriteLine($"DateTimeLocal AddYears: {stopWatch.ElapsedMilliseconds} ms");
+        _outputHelper.WriteLine($"TimezoneDateTime AddYears: {stopWatch.ElapsedMilliseconds} ms");
 
         Assert.True(true);
     }
@@ -217,7 +218,7 @@ public class MemoryTests : IAsyncLifetime
         }
 
         stopWatch.Stop();
-        _outputHelper.WriteLine($"DateTimeLocal GetYear: {stopWatch.ElapsedMilliseconds} ms");
+        _outputHelper.WriteLine($"TimezoneDateTime GetYear: {stopWatch.ElapsedMilliseconds} ms");
 
         Assert.True(true);
     }
@@ -248,7 +249,7 @@ public class MemoryTests : IAsyncLifetime
         }
 
         stopWatch.Stop();
-        _outputHelper.WriteLine($"DateTimeLocal GetYear: {stopWatch.ElapsedMilliseconds} ms");
+        _outputHelper.WriteLine($"TimezoneDateTime GetYear: {stopWatch.ElapsedMilliseconds} ms");
 
         Assert.True(true);
     }
@@ -279,7 +280,7 @@ public class MemoryTests : IAsyncLifetime
         }
 
         stopWatch.Stop();
-        _outputHelper.WriteLine($"DateTimeLocal GetMinute: {stopWatch.ElapsedMilliseconds} ms");
+        _outputHelper.WriteLine($"TimezoneDateTime GetMinute: {stopWatch.ElapsedMilliseconds} ms");
 
         Assert.True(true);
     }
@@ -310,7 +311,7 @@ public class MemoryTests : IAsyncLifetime
         }
 
         stopWatch.Stop();
-        _outputHelper.WriteLine($"DateTimeLocal GetMinute: {stopWatch.ElapsedMilliseconds} ms");
+        _outputHelper.WriteLine($"TimezoneDateTime GetMinute: {stopWatch.ElapsedMilliseconds} ms");
 
         Assert.True(true);
     }
@@ -335,7 +336,7 @@ public class MemoryTests : IAsyncLifetime
         }
 
         stopWatch.Stop();
-        _outputHelper.WriteLine($"DateTimeLocal GetStartOfNextWeek: {stopWatch.ElapsedMilliseconds} ms");
+        _outputHelper.WriteLine($"TimezoneDateTime GetStartOfNextWeek: {stopWatch.ElapsedMilliseconds} ms");
 
         Assert.True(true);
     }
@@ -360,7 +361,7 @@ public class MemoryTests : IAsyncLifetime
         }
 
         stopWatch.Stop();
-        _outputHelper.WriteLine($"DateTimeLocal GetStartOfNextMonth: {stopWatch.ElapsedMilliseconds} ms");
+        _outputHelper.WriteLine($"TimezoneDateTime GetStartOfNextMonth: {stopWatch.ElapsedMilliseconds} ms");
 
         Assert.True(true);
     }
@@ -385,7 +386,7 @@ public class MemoryTests : IAsyncLifetime
         }
 
         stopWatch.Stop();
-        _outputHelper.WriteLine($"DateTimeLocal GetStartOfWeek: {stopWatch.ElapsedMilliseconds} ms");
+        _outputHelper.WriteLine($"TimezoneDateTime GetStartOfWeek: {stopWatch.ElapsedMilliseconds} ms");
 
         Assert.True(true);
     }
@@ -410,7 +411,7 @@ public class MemoryTests : IAsyncLifetime
         }
 
         stopWatch.Stop();
-        _outputHelper.WriteLine($"DateTimeLocal GetStartOfNextDay: {stopWatch.ElapsedMilliseconds} ms");
+        _outputHelper.WriteLine($"TimezoneDateTime GetStartOfNextDay: {stopWatch.ElapsedMilliseconds} ms");
 
         Assert.True(true);
     }

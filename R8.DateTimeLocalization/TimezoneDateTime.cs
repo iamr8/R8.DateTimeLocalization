@@ -12,7 +12,7 @@ namespace R8.DateTimeLocalization;
 ///     Represents an instant in time, typically expressed as a date and time of day according to a particular calendar and
 ///     time zone.
 /// </summary>
-[JsonConverter(typeof(DateTimeLocalJsonConverter))]
+[JsonConverter(typeof(CustomJsonConverter))]
 public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateTime>, IEquatable<TimezoneDateTime>, IFormattable
 {
     private readonly ushort _timezone;
@@ -188,7 +188,7 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ITimezone GetTimezone()
     {
-        return LocalTimezone.Mappings[_timezone].GetTimezone()!;
+        return LocalTimezone.Mappings[_timezone].GetTimezone();
     }
 
     /// <summary>
@@ -223,7 +223,7 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
         var currentYear = zoned?.Year ?? dateTime.Year;
         var currentHour = zoned?.Hour ?? dateTime.Hour;
 
-        return new TimezoneDateTime(currentYear, currentMonth, currentDay, currentHour, 0, 0, timezoneInfo.GetTimezone()!);
+        return new TimezoneDateTime(currentYear, currentMonth, currentDay, currentHour, 0, 0, timezoneInfo.GetTimezone());
     }
 
     /// <summary>
@@ -243,7 +243,7 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
         var currentYear = zoned?.Year ?? dateTime.Year;
         var currentHour = zoned?.Hour ?? dateTime.Hour;
 
-        return new TimezoneDateTime(currentYear, currentMonth, currentDay, currentHour, 59, 59, 9999999, timezoneInfo.GetTimezone()!);
+        return new TimezoneDateTime(currentYear, currentMonth, currentDay, currentHour, 59, 59, 9999999, timezoneInfo.GetTimezone());
     }
 
     /// <summary>
@@ -264,7 +264,7 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
         var currentHour = zoned?.Hour ?? dateTime.Hour;
         var currentMinute = zoned?.Minute ?? dateTime.Minute;
 
-        return new TimezoneDateTime(currentYear, currentMonth, currentDay, currentHour, currentMinute, 0, timezoneInfo.GetTimezone()!);
+        return new TimezoneDateTime(currentYear, currentMonth, currentDay, currentHour, currentMinute, 0, timezoneInfo.GetTimezone());
     }
 
     /// <summary>
@@ -285,7 +285,7 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
         var currentHour = zoned?.Hour ?? dateTime.Hour;
         var currentMinute = zoned?.Minute ?? dateTime.Minute;
 
-        return new TimezoneDateTime(currentYear, currentMonth, currentDay, currentHour, currentMinute, 59, 9999999, timezoneInfo.GetTimezone()!);
+        return new TimezoneDateTime(currentYear, currentMonth, currentDay, currentHour, currentMinute, 59, 9999999, timezoneInfo.GetTimezone());
     }
 
     /// <summary>
@@ -305,7 +305,7 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
         var currentMonth = zoned?.Month ?? dateTime.Month;
         var currentYear = zoned?.Year ?? dateTime.Year;
 
-        return new TimezoneDateTime(currentYear, currentMonth, currentDay, 0, 0, 0, timezoneInfo.GetTimezone()!);
+        return new TimezoneDateTime(currentYear, currentMonth, currentDay, 0, 0, 0, timezoneInfo.GetTimezone());
     }
 
     /// <summary>
@@ -324,12 +324,12 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
         var daysInMonth = timezoneInfo.Clock.Calendar.GetDaysInMonth(currentYear, currentMonth);
         if (currentDay == daysInMonth)
         {
-            if (currentMonth == 12) return new TimezoneDateTime(currentYear + 1, 1, 1, 0, 0, 0, timezoneInfo.GetTimezone()!);
+            if (currentMonth == 12) return new TimezoneDateTime(currentYear + 1, 1, 1, 0, 0, 0, timezoneInfo.GetTimezone());
 
-            return new TimezoneDateTime(currentYear, currentMonth + 1, 1, 0, 0, 0, timezoneInfo.GetTimezone()!);
+            return new TimezoneDateTime(currentYear, currentMonth + 1, 1, 0, 0, 0, timezoneInfo.GetTimezone());
         }
 
-        return new TimezoneDateTime(currentYear, currentMonth, currentDay + 1, 0, 0, 0, timezoneInfo.GetTimezone()!);
+        return new TimezoneDateTime(currentYear, currentMonth, currentDay + 1, 0, 0, 0, timezoneInfo.GetTimezone());
     }
 
     /// <summary>
@@ -348,7 +348,7 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
         var currentMonth = zoned?.Month ?? dateTime.Month;
         var currentYear = zoned?.Year ?? dateTime.Year;
 
-        return new TimezoneDateTime(currentYear, currentMonth, currentDay, 23, 59, 59, 9999999, timezoneInfo.GetTimezone()!);
+        return new TimezoneDateTime(currentYear, currentMonth, currentDay, 23, 59, 59, 9999999, timezoneInfo.GetTimezone());
     }
 
     /// <summary>
@@ -366,7 +366,7 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
         var currentMonth = zoned?.Month ?? dateTime.Month;
         var currentYear = zoned?.Year ?? dateTime.Year;
 
-        return new TimezoneDateTime(currentYear, currentMonth, 1, 0, 0, 0, timezoneInfo.GetTimezone()!);
+        return new TimezoneDateTime(currentYear, currentMonth, 1, 0, 0, 0, timezoneInfo.GetTimezone());
     }
 
     /// <summary>
@@ -385,7 +385,7 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
         var currentYear = zoned?.Year ?? dateTime.Year;
         var daysInMonth = timezoneInfo.Clock.Calendar.GetDaysInMonth(currentYear, currentMonth);
 
-        return new TimezoneDateTime(currentYear, currentMonth, daysInMonth, 23, 59, 59, 9999999, timezoneInfo.GetTimezone()!);
+        return new TimezoneDateTime(currentYear, currentMonth, daysInMonth, 23, 59, 59, 9999999, timezoneInfo.GetTimezone());
     }
 
     /// <summary>
@@ -401,9 +401,9 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
         var currentMonth = zoned?.Month ?? dateTime.Month;
         var currentYear = zoned?.Year ?? dateTime.Year;
         if (currentMonth == 12)
-            return new TimezoneDateTime(currentYear + 1, 1, 1, 0, 0, 0, timezoneInfo.GetTimezone()!);
+            return new TimezoneDateTime(currentYear + 1, 1, 1, 0, 0, 0, timezoneInfo.GetTimezone());
 
-        return new TimezoneDateTime(currentYear, currentMonth + 1, 1, 0, 0, 0, timezoneInfo.GetTimezone()!);
+        return new TimezoneDateTime(currentYear, currentMonth + 1, 1, 0, 0, 0, timezoneInfo.GetTimezone());
     }
 
     /// <summary>
@@ -413,7 +413,7 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
     public TimezoneDateTime GetStartOfWeek()
     {
         var firstDayOfWeek = GetFirstDayOfWeek(out var timezoneInfo);
-        return new TimezoneDateTime(firstDayOfWeek.Year, firstDayOfWeek.Month, firstDayOfWeek.Day, 0, 0, 0, 0, timezoneInfo.GetTimezone()!);
+        return new TimezoneDateTime(firstDayOfWeek.Year, firstDayOfWeek.Month, firstDayOfWeek.Day, 0, 0, 0, 0, timezoneInfo.GetTimezone());
     }
 
     private ZonedDateTime GetFirstDayOfWeek(out LocalTimezoneInfo timezoneInfo)
@@ -446,7 +446,7 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
 
         var firstDayOfWeek = GetFirstDayOfWeek(out var timezone);
         var lastDayOfWeek = firstDayOfWeek.Plus(Duration.FromDays(lastDayIndex));
-        return new TimezoneDateTime(lastDayOfWeek.Year, lastDayOfWeek.Month, lastDayOfWeek.Day, 23, 59, 59, 9999999, timezone.GetTimezone()!);
+        return new TimezoneDateTime(lastDayOfWeek.Year, lastDayOfWeek.Month, lastDayOfWeek.Day, 23, 59, 59, 9999999, timezone.GetTimezone());
     }
 
     /// <summary>
@@ -473,12 +473,12 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
             var dayInNextMonth = firstDayOfNextWeek - daysInMonth;
             var nextMonth = currentMonth + 1;
             if (nextMonth == 13)
-                return new TimezoneDateTime(currentYear + 1, 1, dayInNextMonth, 0, 0, 0, timezoneInfo.GetTimezone()!);
+                return new TimezoneDateTime(currentYear + 1, 1, dayInNextMonth, 0, 0, 0, timezoneInfo.GetTimezone());
 
-            return new TimezoneDateTime(currentYear, currentMonth + 1, dayInNextMonth, 0, 0, 0, timezoneInfo.GetTimezone()!);
+            return new TimezoneDateTime(currentYear, currentMonth + 1, dayInNextMonth, 0, 0, 0, timezoneInfo.GetTimezone());
         }
 
-        return new TimezoneDateTime(currentYear, currentMonth, firstDayOfNextWeek, 0, 0, 0, timezoneInfo.GetTimezone()!);
+        return new TimezoneDateTime(currentYear, currentMonth, firstDayOfNextWeek, 0, 0, 0, timezoneInfo.GetTimezone());
     }
 
     /// <summary>
@@ -643,7 +643,7 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
             return 1;
         if (obj is TimezoneDateTime tz)
             return Compare(this, tz);
-        throw new ArgumentException("Argument must be DateTimeLocal");
+        throw new ArgumentException("Argument must be TimezoneDateTime");
     }
 
     public int CompareTo(TimezoneDateTime value)
@@ -953,7 +953,7 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
         return currentYear == today.Year && currentMonth == today.Month && currentDay == today.Day;
     }
 
-    public class DateTimeLocalJsonConverter : JsonConverter<TimezoneDateTime>
+    public class CustomJsonConverter : JsonConverter<TimezoneDateTime>
     {
         public override TimezoneDateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
