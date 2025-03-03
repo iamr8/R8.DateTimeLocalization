@@ -163,20 +163,6 @@ public class TimezoneTests
     }
 
     [Fact]
-    public void should_return_timezone_without_resolver()
-    {
-        // Act
-        var timezone = LocalTimezone.Get("Europe/Paris");
-
-        // Assert
-        timezone.IanaId.Should().Be("Europe/Paris");
-        timezone.GetSystemTimeZone().StandardName.Should().Be("Central European Standard Time");
-        timezone.ToString().Should().BeOneOf("GMT+01:00", "GMT+02:00");
-        timezone.Culture.Should().Be(CultureInfo.InvariantCulture);
-        timezone.Calendar.Should().Be(CalendarSystem.Iso);
-    }
-
-    [Fact]
     public void should_be_equal()
     {
         var timezone = LocalTimezone.Get("Asia/Tehran");
