@@ -1,5 +1,5 @@
 using FluentAssertions;
-using R8.DateTimeLocalization.Tests.TimezoneMappers;
+using R8.DateTimeLocalization.Tests.Timezones;
 using Xunit.Abstractions;
 
 namespace R8.DateTimeLocalization.Tests;
@@ -15,8 +15,8 @@ public class TimezoneDateTimeTests : IAsyncLifetime
 
     public Task InitializeAsync()
     {
-        LocalTimezone.Mappings.GetOrCreate<IranTimezone>();
-        LocalTimezone.Mappings.GetOrCreate<TurkeyTimezone>();
+        LocalTimezone.Mappings.Add<IranTimezone>();
+        LocalTimezone.Mappings.Add<TurkeyTimezone>();
         return Task.CompletedTask;
     }
 
@@ -28,7 +28,7 @@ public class TimezoneDateTimeTests : IAsyncLifetime
     [Fact]
     public void should_add()
     {
-        var timezone = LocalTimezone.Mappings.GetOrCreate<IranTimezone>();
+        var timezone = LocalTimezone.Mappings.Add<IranTimezone>();
         timezone.Should().NotBeNull();
     }
 

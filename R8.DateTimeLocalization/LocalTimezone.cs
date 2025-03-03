@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using NodaTime;
@@ -17,7 +18,7 @@ public class LocalTimezone : ITimezone, IEquatable<LocalTimezone>, IComparable<L
     /// <summary>
     ///     A collection of <see cref="ITimezone" /> that can be used to resolve timezone information.
     /// </summary>
-    public static LocalTimezoneInfoCollection Mappings = new();
+    internal static LocalTimezoneInfoCollection Mappings = new();
 
     private static readonly object SyncRoot = new();
     private static ConcurrentDictionary<string, LocalTimezone> _cached = new();
@@ -31,7 +32,7 @@ public class LocalTimezone : ITimezone, IEquatable<LocalTimezone>, IComparable<L
     {
         lock (SyncRoot)
         {
-            _current ??= CurrentLocal.Value ?? GetOrCreate(GetDefaultZone());
+            _current ??= CurrentLocal.Value ?? Get(GetDefaultZone());
         }
     }
 
@@ -58,7 +59,7 @@ public class LocalTimezone : ITimezone, IEquatable<LocalTimezone>, IComparable<L
                     return _current;
 
                 var defaultZone = GetDefaultZone();
-                _current = GetOrCreate(defaultZone);
+                _current = Get(defaultZone);
                 return _current;
             }
         }
@@ -75,7 +76,7 @@ public class LocalTimezone : ITimezone, IEquatable<LocalTimezone>, IComparable<L
     /// <summary>
     ///     Gets a <see cref="LocalTimezone" /> object representing the UTC timezone.
     /// </summary>
-    public static LocalTimezone Utc => GetOrCreate("UTC");
+    public static LocalTimezone Utc => Get("UTC");
 
 
     public int CompareTo(LocalTimezone? other)
@@ -148,10 +149,20 @@ public class LocalTimezone : ITimezone, IEquatable<LocalTimezone>, IComparable<L
     /// <param name="ianaId">A valid IANA ID.</param>
     /// <returns>A <see cref="LocalTimezone" /> object</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="ianaId" /> is null.</exception>
-    public static LocalTimezone GetOrCreate(string? ianaId)
+    public static LocalTimezone Get(string? ianaId)
     {
         ArgumentNullException.ThrowIfNull(ianaId);
-        return GetOrCreate(DateTimeZoneProviders.Tzdb[ianaId]);
+        return Get(DateTimeZoneProviders.Tzdb[ianaId]);
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of <see cref="LocalTimezone" />.
+    /// </summary>
+    /// <returns>A <see cref="LocalTimezone" /> object</returns>
+    public static LocalTimezone Get<TMap>() where TMap : LocalTimezoneInfo
+    {
+        var instance = Mappings.First(c => c.GetType() == typeof(TMap));
+        return instance.GetTimezone();
     }
 
     /// <summary>
@@ -160,7 +171,7 @@ public class LocalTimezone : ITimezone, IEquatable<LocalTimezone>, IComparable<L
     /// <param name="zone">A Zone to use.</param>
     /// <returns>A <see cref="LocalTimezone" /> object</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="zone" /> is null.</exception>
-    public static LocalTimezone GetOrCreate(DateTimeZone? zone)
+    public static LocalTimezone Get(DateTimeZone? zone)
     {
         ArgumentNullException.ThrowIfNull(zone);
         _cached ??= new ConcurrentDictionary<string, LocalTimezone>();
@@ -193,7 +204,7 @@ public class LocalTimezone : ITimezone, IEquatable<LocalTimezone>, IComparable<L
 
     public static implicit operator LocalTimezone(string? ianaId)
     {
-        return GetOrCreate(ianaId);
+        return Get(ianaId);
     }
 
     public static implicit operator string(LocalTimezone timezone)

@@ -1,6 +1,6 @@
 using System.Text.Json;
 using FluentAssertions;
-using R8.DateTimeLocalization.Tests.TimezoneMappers;
+using R8.DateTimeLocalization.Tests.Timezones;
 using Xunit.Abstractions;
 
 namespace R8.DateTimeLocalization.Tests;
@@ -16,8 +16,8 @@ public class TimezoneDateTimeJsonTests : IAsyncLifetime
 
     public Task InitializeAsync()
     {
-        LocalTimezone.Mappings.GetOrCreate<IranTimezone>();
-        LocalTimezone.Mappings.GetOrCreate<TurkeyTimezone>();
+        LocalTimezone.Mappings.Add<IranTimezone>();
+        LocalTimezone.Mappings.Add<TurkeyTimezone>();
         return Task.CompletedTask;
     }
 

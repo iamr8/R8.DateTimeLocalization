@@ -1,7 +1,7 @@
 using System.Globalization;
 using FluentAssertions;
 using NodaTime;
-using R8.DateTimeLocalization.Tests.TimezoneMappers;
+using R8.DateTimeLocalization.Tests.Timezones;
 
 namespace R8.DateTimeLocalization.Tests;
 
@@ -10,10 +10,10 @@ public class TimezoneTests
     public TimezoneTests()
     {
         // LocalTimezone.Mappings.Clear();
-        LocalTimezone.Mappings.GetOrCreate<IranTimezone>();
-        LocalTimezone.Mappings.GetOrCreate<TurkeyTimezone>();
-        LocalTimezone.Mappings.GetOrCreate<UKTimezone>();
-        LocalTimezone.Mappings.GetOrCreate<LosAngelesTimezone>();
+        LocalTimezone.Mappings.Add<IranTimezone>();
+        LocalTimezone.Mappings.Add<TurkeyTimezone>();
+        LocalTimezone.Mappings.Add<UKTimezone>();
+        LocalTimezone.Mappings.Add<LosAngelesTimezone>();
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public class TimezoneTests
     public void should_return_timezone_of_iran()
     {
         // Act
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
+        var timezone = LocalTimezone.Get("Asia/Tehran");
 
         // Assert
         timezone.IanaId.Should().Be("Asia/Tehran");
@@ -76,7 +76,7 @@ public class TimezoneTests
     public void should_return_timezone_of_turkey()
     {
         // Act
-        var timezone = LocalTimezone.GetOrCreate("Europe/Istanbul");
+        var timezone = LocalTimezone.Get("Europe/Istanbul");
 
         // Assert
         timezone.IanaId.Should().Be("Europe/Istanbul");
@@ -98,7 +98,7 @@ public class TimezoneTests
     public void should_return_timezone_of_los_angeles()
     {
         // Act
-        var timezone = LocalTimezone.GetOrCreate("America/Los_Angeles");
+        var timezone = LocalTimezone.Get("America/Los_Angeles");
 
         // Assert
         timezone.IanaId.Should().Be("America/Los_Angeles");
@@ -121,7 +121,7 @@ public class TimezoneTests
     public void should_return_timezone_of_uk()
     {
         // Act
-        var timezone = LocalTimezone.GetOrCreate("Europe/London");
+        var timezone = LocalTimezone.Get("Europe/London");
 
         // Assert
         timezone.IanaId.Should().Be("Europe/London");
@@ -143,7 +143,7 @@ public class TimezoneTests
     public void should_return_cached_timezone()
     {
         // Act
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
+        var timezone = LocalTimezone.Get("Asia/Tehran");
 
         // Assert
         timezone.IanaId.Should().Be("Asia/Tehran");
@@ -166,7 +166,7 @@ public class TimezoneTests
     public void should_return_timezone_without_resolver()
     {
         // Act
-        var timezone = LocalTimezone.GetOrCreate("Europe/Paris");
+        var timezone = LocalTimezone.Get("Europe/Paris");
 
         // Assert
         timezone.IanaId.Should().Be("Europe/Paris");
@@ -179,8 +179,8 @@ public class TimezoneTests
     [Fact]
     public void should_be_equal()
     {
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
-        var timezone2 = LocalTimezone.GetOrCreate("Asia/Tehran");
+        var timezone = LocalTimezone.Get("Asia/Tehran");
+        var timezone2 = LocalTimezone.Get("Asia/Tehran");
 
         timezone.Should().Be(timezone2);
     }
@@ -188,8 +188,8 @@ public class TimezoneTests
     [Fact]
     public void should_not_be_equal()
     {
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
-        var timezone2 = LocalTimezone.GetOrCreate("Europe/Istanbul");
+        var timezone = LocalTimezone.Get("Asia/Tehran");
+        var timezone2 = LocalTimezone.Get("Europe/Istanbul");
 
         timezone.Should().NotBe(timezone2);
     }
@@ -197,7 +197,7 @@ public class TimezoneTests
     [Fact]
     public void should_not_be_equal_with_null()
     {
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
+        var timezone = LocalTimezone.Get("Asia/Tehran");
 
         timezone.Should().NotBeNull();
     }
@@ -205,8 +205,8 @@ public class TimezoneTests
     [Fact]
     public void should_be_equal_by_operator()
     {
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
-        var timezone2 = LocalTimezone.GetOrCreate("Asia/Tehran");
+        var timezone = LocalTimezone.Get("Asia/Tehran");
+        var timezone2 = LocalTimezone.Get("Asia/Tehran");
 
         (timezone == timezone2).Should().BeTrue();
     }
@@ -214,8 +214,8 @@ public class TimezoneTests
     [Fact]
     public void should_not_be_equal_by_operator()
     {
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
-        var timezone2 = LocalTimezone.GetOrCreate("Europe/Istanbul");
+        var timezone = LocalTimezone.Get("Asia/Tehran");
+        var timezone2 = LocalTimezone.Get("Europe/Istanbul");
 
         (timezone != timezone2).Should().BeTrue();
     }
@@ -223,7 +223,7 @@ public class TimezoneTests
     [Fact]
     public void should_be_casted_to_string()
     {
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
+        var timezone = LocalTimezone.Get("Asia/Tehran");
         ((string)timezone).Should().Be("Asia/Tehran");
     }
 
@@ -237,7 +237,7 @@ public class TimezoneTests
     [Fact]
     public void should_return_offset_from_timezone()
     {
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
+        var timezone = LocalTimezone.Get("Asia/Tehran");
         var offset = timezone.Offset;
 
         offset.Should().Be(Offset.FromHoursAndMinutes(3, 30));
@@ -246,8 +246,8 @@ public class TimezoneTests
     [Fact]
     public void should_be_comparable_greater_than()
     {
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
-        var timezone2 = LocalTimezone.GetOrCreate("Europe/Istanbul");
+        var timezone = LocalTimezone.Get("Asia/Tehran");
+        var timezone2 = LocalTimezone.Get("Europe/Istanbul");
 
         (timezone > timezone2).Should().BeTrue();
     }
@@ -255,8 +255,8 @@ public class TimezoneTests
     [Fact]
     public void should_be_comparable_greater_than_or_equal()
     {
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
-        var timezone2 = LocalTimezone.GetOrCreate("Asia/Tehran");
+        var timezone = LocalTimezone.Get("Asia/Tehran");
+        var timezone2 = LocalTimezone.Get("Asia/Tehran");
 
         (timezone >= timezone2).Should().BeTrue();
     }
@@ -264,8 +264,8 @@ public class TimezoneTests
     [Fact]
     public void should_be_comparable_less_than()
     {
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
-        var timezone2 = LocalTimezone.GetOrCreate("Europe/Istanbul");
+        var timezone = LocalTimezone.Get("Asia/Tehran");
+        var timezone2 = LocalTimezone.Get("Europe/Istanbul");
 
         (timezone2 < timezone).Should().BeTrue();
     }
@@ -273,8 +273,8 @@ public class TimezoneTests
     [Fact]
     public void should_be_comparable_less_than_or_equal()
     {
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
-        var timezone2 = LocalTimezone.GetOrCreate("Asia/Tehran");
+        var timezone = LocalTimezone.Get("Asia/Tehran");
+        var timezone2 = LocalTimezone.Get("Asia/Tehran");
 
         (timezone2 <= timezone).Should().BeTrue();
     }
@@ -282,8 +282,8 @@ public class TimezoneTests
     [Fact]
     public void should_be_comparable_hash_code()
     {
-        var timezone = LocalTimezone.GetOrCreate("Asia/Tehran");
-        var timezone2 = LocalTimezone.GetOrCreate("Asia/Tehran");
+        var timezone = LocalTimezone.Get("Asia/Tehran");
+        var timezone2 = LocalTimezone.Get("Asia/Tehran");
 
         timezone2.GetHashCode().Should().Be(timezone.GetHashCode());
     }

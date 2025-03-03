@@ -15,6 +15,7 @@ public abstract class LocalTimezoneInfo : ITimezoneInfo
     private static readonly Lazy<DayOfWeek[]> UnorderedDaysOfWeek = new(() => Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>().ToArray(), LazyThreadSafetyMode.ExecutionAndPublication);
 
     internal ushort _index;
+    public abstract CalendarSystem Calendar { get; }
 
     public DayOfWeek[] DaysOfWeek
     {
@@ -44,7 +45,7 @@ public abstract class LocalTimezoneInfo : ITimezoneInfo
 
     public abstract string IanaId { get; }
     public abstract CultureInfo Culture { get; }
-    public ZonedClock Clock { get; protected init; }
+    public ZonedClock Clock { get; protected internal set; }
 
     public int GetDayNumberInWeek(DayOfWeek dayOfWeek)
     {
@@ -64,6 +65,6 @@ public abstract class LocalTimezoneInfo : ITimezoneInfo
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public LocalTimezone GetTimezone()
     {
-        return LocalTimezone.GetOrCreate(IanaId);
+        return LocalTimezone.Get(IanaId);
     }
 }

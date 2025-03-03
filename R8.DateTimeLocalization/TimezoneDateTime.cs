@@ -958,7 +958,7 @@ public readonly struct TimezoneDateTime : IComparable, IComparable<TimezoneDateT
         public override TimezoneDateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType == JsonTokenType.Null)
-                return TimezoneDateTime.Empty;
+                return Empty;
 
             if (reader.TokenType != JsonTokenType.String)
                 throw new JsonException($"The value is expected to be a string, but was {reader.TokenType}");

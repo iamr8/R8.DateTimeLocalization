@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NodaTime;
+using NodaTime.Extensions;
 
 namespace R8.DateTimeLocalization;
 
@@ -72,7 +74,7 @@ public class LocalTimezoneInfoCollection : IEnumerable<LocalTimezoneInfo>
     /// <param name="value">A mapper that implements <see cref="ITimezone" />.</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="value" /> is <see langword="null" />.</exception>
     /// <typeparam name="TMap">Any type that implements <see cref="ITimezone" />.</typeparam>
-    public LocalTimezone GetOrCreate<TMap>() where TMap : LocalTimezoneInfo, new()
+    public LocalTimezone Add<TMap>() where TMap : LocalTimezoneInfo, new()
     {
         lock (_syncRoot)
         {
@@ -88,6 +90,7 @@ public class LocalTimezoneInfoCollection : IEnumerable<LocalTimezoneInfo>
             return (T)_dictionary[map.IanaId];
 
         map._index = unchecked((ushort)(_dictionary.Count - 1));
+        map.Clock = SystemClock.Instance.InZone(DateTimeZoneProviders.Tzdb[map.IanaId], map.Calendar);
         return map;
     }
 
